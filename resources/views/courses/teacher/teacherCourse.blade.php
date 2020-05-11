@@ -22,40 +22,29 @@
                         </thead>
                         <tbody>
                         @foreach($courses as $course)
-                            <tr>
-                                <th scope="row">{{$course->name}}</th>
-                                <td scope="row">
-                                    <a class="" href="{{route('courses.users',['id' => $course->id])}}">
-                                        Show students
-                                    </a>
-                                </td>
-                                <td>
-                                    <a class="" href="{{route('courses.teacher.edit',['id'=>$course->id])}}">
-                                        edit
-                                    </a>
-                                </td>
+                            @if ($course->teacher == $teacher)
+                                <tr>
+                                    <th scope="row">{{$course->name}}</th>
+                                    <td scope="row">
+                                        <a class="" href="{{route('courses.users',['id' => $course->id])}}">
+                                            Show students
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a class="" href="{{route('courses.teacher.edit',['id'=>$course->id])}}">
+                                            edit
+                                        </a>
+                                    </td>
 
-                                <td scope="row">
-                                    <img height="50px" width="50px" src="{{ asset($course->image) }}">
-                                </td>
-                            </tr>
+                                    <td scope="row">
+                                        <img height="50px" width="50px" src="{{ asset($course->image) }}">
+                                    </td>
+                                </tr>
+                            @endif
                         @endforeach
 
                         </tbody>
                     </table>
-
-                    <div class="card-body">
-                        <ul class="list-group">
-                            @foreach ($courses as $course)
-                                @if ($course->teacher == $teacher)
-                                    <ul class="list-group">
-                                        <img class="img-fluid" alt="Responsive image" src="{{ asset($course->image) }}">
-                                        <li class="list-group-item">course name: {{$course->name}}</li>
-                                    </ul>
-                                @endif
-                            @endforeach
-                        </ul>
-                    </div>
                 </div>
             </div>
         </div>
