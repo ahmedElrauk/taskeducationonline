@@ -16,25 +16,35 @@
 
 {{--                                    {{dd($course->users->count())}}--}}
                                     @if($course->users->count() != 0)
+                                        {{$jo = false}}
                                         @foreach($course->users as $user)
-                                            @if ($user->name == auth()->user()->name)
+                                            @if ($user->name != auth()->user()->name)
+                                                {{$jo = true}}
                                                 @continue
                                             @else
-                                                <a id="" class="nav-link" href="{{route('users.join',['id' => $course->id])}}" role="button" >
-                                                    join <span class="caret"></span>
+                                                {{$jo = false}}
+                                                <a id="" class="nav-link" href="{{route('course.showCourse',['id' => $course->id])}}" role="button" >
+                                                    Show <span class="caret"></span>
                                                 </a>
                                                 @break
                                             @endif
+
+
                                         @endforeach
+                                        @if ($jo == true)
+                                            <a id="" class="nav-link" href="{{route('users.join',['id' => $course->id])}}" role="button" >
+                                                join <span class="caret"></span>
+                                            </a>
+                                        @endif
                                     @else
                                         <a id="" class="nav-link" href="{{route('users.join',['id' => $course->id])}}" role="button" >
                                             join <span class="caret"></span>
                                         </a>
                                     @endif
 
-                                    <a id="" class="nav-link" href="{{route('course.showCourse',['id' => $course->id])}}" role="button" >
-                                        Show <span class="caret"></span>
-                                    </a>
+{{--                                    <a id="" class="nav-link" href="{{route('course.showCourse',['id' => $course->id])}}" role="button" >--}}
+{{--                                        Show <span class="caret"></span>--}}
+{{--                                    </a>--}}
                                 </li>
                                 </li>
                             @endforeach
