@@ -4,11 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Admin;
 use App\Course;
+use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
+
+        public function __construct()
+    {
+        $this->middleware(['role:admin_user']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -21,6 +27,34 @@ class AdminController extends Controller
         $users = User::orderBy('created_at','desc')->take(5)->get();
         //return view('courses.teacher.edit')->with('course',$course);
         return view('admin.index')->with('courses',$courses)->with('users',$users);
+    }
+
+    public function edit($id)
+    {
+        $user = User::find($id);
+        return view('users.edit')->with('myRoles',Role::all())->with('user',$user);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::where('id',$id)->first();
+        $this->validate($request,[
+            'name' => 'required',
+            'roles' => 'required|array|min:1',
+        ]);
+
+        $requestData = $request->except('email');
+        $user->save();
+        $user->syncRoles($request->roles);
+
+        return redirect()->route('users');
+    }
+
+    public function allCourses()
+    {
+        return view('courses.index')
+            ->with('courses',Course::all())
+            ->with('users',User::all());
     }
 
     /**
@@ -61,10 +95,6 @@ class AdminController extends Controller
      * @param  \App\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function edit(Admin $admin)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -73,10 +103,7 @@ class AdminController extends Controller
      * @param  \App\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Admin $admin)
-    {
-        //
-    }
+
 
     /**
      * Remove the specified resource from storage.
@@ -84,8 +111,10 @@ class AdminController extends Controller
      * @param  \App\Admin  $admin
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Admin $admin)
+    public function delete($id)
     {
-        //
+        $user = User::find($id);
+        $user->delete();
+        return redirect()->back();
     }
 }

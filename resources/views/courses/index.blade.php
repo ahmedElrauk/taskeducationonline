@@ -48,7 +48,7 @@
                                 </tr>
                             @endforeach
 
-                            <a class="" href="{{route('courses.create')}}">
+                            <a class="" href="{{route('courses.teacher.newCourse')}}">
                                 Add new course
                             </a>
 

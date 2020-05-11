@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Course;
 use App\Role;
+use Illuminate\Support\Facades\DB;
+
 class CourseController extends Controller
 {
     /**
@@ -139,11 +141,20 @@ class CourseController extends Controller
     }
 
     public function deleteUser($c_id, $u_id){
-        $course = Course::find($c_id);
-        $users = $course->users;
-        $user = $users->where('id',$u_id);
-        $user->delete();
-        return redirect()->route('courses.users');
+        //$course = Course::find($c_id);
+//        $user = User::find($u_id);
+//        $users = $course->users;
+        $course = DB::table('course_user')->where('user_id',$u_id)->where('course_id',$c_id)->delete();
+        //dd($course);
+//        $course->delete();
+//        foreach ($users as $m_user){
+////            if ($user->name == $m_user->name){
+//                echo $m_user;
+//            //}
+//        }
+//        $user = $users->where('id',$u_id);
+//        $user->delete();
+        return redirect()->back();
     }
 
     public function newCourse()
@@ -151,30 +162,30 @@ class CourseController extends Controller
         return view('courses.teacher.newCourse');
     }
 
-    public function storeCourse(Request $request)
-    {
-        $this->validate($request,[
-            'name' => 'required|unique:courses',
-            'image' => 'required|image',
-        ]);
+//    public function storeCourse(Request $request)
+//    {
+//        $this->validate($request,[
+//            'name' => 'required|unique:courses',
+//            'image' => 'required|image',
+//        ]);
+//
+//        $image = $request->image;
+//        $image_new_name = time().$image->getClientOriginalName();
+//        $image -> move('uploads/courses/' , $image_new_name);
+//        $course = Course::create(array(
+//            "name"=>$request->name,
+//            "image"    => 'uploads/courses/'.$image_new_name,
+//            "teacher"=>auth()->user()->name
+//        ));
+//
+//        return redirect()->back();
+//    }
 
-        $image = $request->image;
-        $image_new_name = time().$image->getClientOriginalName();
-        $image -> move('uploads/courses/' , $image_new_name);
-        $course = Course::create(array(
-            "name"=>$request->name,
-            "image"    => 'uploads/courses/'.$image_new_name,
-            "teacher"=>auth()->user()->name
-        ));
-
-        return redirect()->back();
-    }
-
-    public function teacherCourse()
-    {
-        $courses = Course::all();
-        $teacher = auth()->user()->name;
-        return view('courses.teacher.teacherCourse')->with('courses',$courses)->with('teacher',$teacher);
-    }
+//    public function teacherCourse()
+//    {
+//        $courses = Course::all();
+//        $teacher = auth()->user()->name;
+//        return view('courses.teacher.teacherCourse')->with('courses',$courses)->with('teacher',$teacher);
+//    }
 
 }
