@@ -42,9 +42,6 @@
                                         </a>
                                     @endif
 
-{{--                                    <a id="" class="nav-link" href="{{route('course.showCourse',['id' => $course->id])}}" role="button" >--}}
-{{--                                        Show <span class="caret"></span>--}}
-{{--                                    </a>--}}
                                 </li>
                                 </li>
                             @endforeach
