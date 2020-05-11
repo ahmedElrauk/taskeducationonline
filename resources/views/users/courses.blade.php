@@ -7,46 +7,60 @@
             <div class="col-md-8">
                 <div class="card">
 
-                    <div class="card-header">create posts</div>
+                    <div class="card-header">view all courses</div>
                     <div class="card-body">
-                        <ul class="list-group">
-                            @foreach ($courses as $course)
-                                <li class="list-group-item"> course name: {{$course->name}}
-                                    , the teacher : {{$course->teacher}}
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Course Name</th>
+                                <th scope="col">Teacher Name</th>
+                                <th scope="col">Join or show</th>
+                                <th scope="col">Image</th>
 
-{{--                                    {{dd($course->users->count())}}--}}
-                                    @if($course->users->count() != 0)
-                                        {{$jo = false}}
-                                        @foreach($course->users as $user)
-                                            @if ($user->name != auth()->user()->name)
-                                                {{$jo = true}}
-                                                @continue
-                                            @else
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($courses as $course)
+                                    <tr>
+                                        <th scope="row">{{$course->name}}</th>
+                                        <th scope="row">{{$course->teacher}}</th>
+                                        <td scope="row">
+                                            @if($course->users->count() != 0)
                                                 {{$jo = false}}
-                                                <a id="" class="nav-link" href="{{route('course.showCourse',['id' => $course->id])}}" role="button" >
-                                                    Show <span class="caret"></span>
+                                                @foreach($course->users as $user)
+                                                    @if ($user->name != auth()->user()->name)
+                                                        {{$jo = true}}
+                                                        @continue
+                                                    @else
+                                                        {{$jo = false}}
+                                                        <a id="" class="nav-link" href="{{route('course.showCourse',['id' => $course->id])}}" role="button" >
+                                                            Show <span class="caret"></span>
+                                                        </a>
+                                                        @break
+                                                    @endif
+
+
+                                                @endforeach
+                                                @if ($jo == true)
+                                                    <a id="" class="nav-link" href="{{route('users.join',['id' => $course->id])}}" role="button" >
+                                                        join <span class="caret"></span>
+                                                    </a>
+                                                @endif
+                                            @else
+                                                <a id="" class="nav-link" href="{{route('users.join',['id' => $course->id])}}" role="button" >
+                                                    join <span class="caret"></span>
                                                 </a>
-                                                @break
                                             @endif
+                                        </td>
 
-
-                                        @endforeach
-                                        @if ($jo == true)
-                                            <a id="" class="nav-link" href="{{route('users.join',['id' => $course->id])}}" role="button" >
-                                                join <span class="caret"></span>
-                                            </a>
-                                        @endif
-                                    @else
-                                        <a id="" class="nav-link" href="{{route('users.join',['id' => $course->id])}}" role="button" >
-                                            join <span class="caret"></span>
-                                        </a>
-                                    @endif
-
-                                </li>
-                                </li>
+                                        <td scope="row">
+                                            <img height="50px" width="50px" src="{{ asset($course->image) }}">
+                                        </td>
+                                    </tr>
                             @endforeach
 
-                        </ul>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
