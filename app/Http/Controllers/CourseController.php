@@ -141,19 +141,7 @@ class CourseController extends Controller
     }
 
     public function deleteUser($c_id, $u_id){
-        //$course = Course::find($c_id);
-//        $user = User::find($u_id);
-//        $users = $course->users;
         $course = DB::table('course_user')->where('user_id',$u_id)->where('course_id',$c_id)->delete();
-        //dd($course);
-//        $course->delete();
-//        foreach ($users as $m_user){
-////            if ($user->name == $m_user->name){
-//                echo $m_user;
-//            //}
-//        }
-//        $user = $users->where('id',$u_id);
-//        $user->delete();
         return redirect()->back();
     }
 
